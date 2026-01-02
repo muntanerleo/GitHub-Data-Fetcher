@@ -1,0 +1,189 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Military Conflict Tracking Data",
+    "description": "Schema for validating military conflict geographic and unit tracking data",
+    "type": "object",
+    "required": [
+        "areas",
+        "areas_ua",
+        "frontline",
+        "geos",
+        "unit_count",
+        "units"
+    ],
+    "properties": {
+        "areas": {
+            "description": "Array of geographic polygon areas representing territorial zones",
+            "type": "array",
+            "items": {
+                "type": "array",
+                "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                        "type": "number"
+                    },
+                    "description": "Coordinate pair [latitude, longitude]"
+                },
+                "minItems": 3,
+                "description": "Polygon defined by at least 3 coordinate pairs"
+            }
+        },
+        "areas_ua": {
+            "description": "Array of Ukrainian-controlled area polygons",
+            "type": "array",
+            "items": {
+                "type": "array",
+                "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "minItems": 3
+            }
+        },
+        "frontline": {
+            "description": "Array of frontline polylines",
+            "type": "array",
+            "items": {
+                "type": "array",
+                "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                        "type": "number"
+                    },
+                    "description": "Coordinate pair [latitude, longitude]"
+                },
+                "minItems": 2,
+                "description": "Polyline defined by at least 2 coordinate pairs"
+            }
+        },
+        "geos": {
+            "description": "Geographic events and incidents by side",
+            "type": "object",
+            "required": [
+                "ru",
+                "ua"
+            ],
+            "properties": {
+                "ru": {
+                    "description": "Russian-attributed incidents",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/geoEvent"
+                    }
+                },
+                "ua": {
+                    "description": "Ukrainian-attributed incidents",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/geoEvent"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "unit_count": {
+            "description": "Total count of military units by side",
+            "type": "object",
+            "required": [
+                "ru",
+                "ua"
+            ],
+            "properties": {
+                "ru": {
+                    "description": "Total Russian units",
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "ua": {
+                    "description": "Total Ukrainian units",
+                    "type": "integer",
+                    "minimum": 0
+                }
+            },
+            "additionalProperties": false
+        },
+        "units": {
+            "description": "Military unit positions by side",
+            "type": "object",
+            "required": [
+                "ru",
+                "ua"
+            ],
+            "properties": {
+                "ru": {
+                    "description": "Russian unit positions",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/unit"
+                    }
+                },
+                "ua": {
+                    "description": "Ukrainian unit positions",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/unit"
+                    }
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "definitions": {
+        "geoEvent": {
+            "description": "A geographic event or incident",
+            "type": "object",
+            "required": [
+                "c",
+                "d"
+            ],
+            "properties": {
+                "c": {
+                    "description": "Coordinates [longitude, latitude]",
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "d": {
+                    "description": "Event description with source URL",
+                    "type": "string",
+                    "minLength": 1
+                }
+            },
+            "additionalProperties": false
+        },
+        "unit": {
+            "description": "A military unit with ID and position",
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": [
+                {
+                    "description": "Unit ID",
+                    "type": "integer",
+                    "minimum": 0
+                },
+                {
+                    "description": "Unit coordinates [longitude, latitude]",
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                        "type": "number"
+                    }
+                }
+            ]
+        }
+    }
+}
